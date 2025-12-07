@@ -1,4 +1,4 @@
-const express = equire("express")
+const express = require("express")
 const JWT_SECRET = "secret"
 const jwt = require("jsonwebtoken")
 const bcrypt  = require("bcrypt")

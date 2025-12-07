@@ -2,7 +2,7 @@ const {Router} = require("express")
 
 const courseRouter = Router()
 
-courseRouter.get("/", async function(req,res){
+courseRouter.get("/preview", async function(req,res){
 
 })
 
