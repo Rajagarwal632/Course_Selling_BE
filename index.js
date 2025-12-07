@@ -11,7 +11,7 @@ const {user} = require("./db")
 
 const app = express()
 
-app.post('/signup',async function(req,res){
+app.post('/user/signup',async function(req,res){
     const reqbody = z.object({
         email : z.email(),
         password : z.string().min(8),
@@ -45,7 +45,7 @@ app.post('/signup',async function(req,res){
 
 
 
-app.post('signin',async function(req,res){
+app.post('/user/signin',async function(req,res){
     const email = req.body.email
     const password = req.body.password
 
@@ -76,6 +76,19 @@ app.post('signin',async function(req,res){
     }
 })
 
- 
+app.get("/courses", async function(req,res){
+
+})
+app.get("/user/purchases", async function(req,res){
+
+})
+app.post("/course/purchase", async function(req,res){
+
+})
+app.get("/", async function(req,res){
+
+})
+
+
 
 app.listen(3000)
