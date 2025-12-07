@@ -9,5 +9,8 @@ const user = new Schema({
     name : String
 })
 
+const usermodel = mongoose.model("user",user)
 
-module.exports = mongoose.model("user",user)
+module.exports = {
+    usermodel : usermodel
+}

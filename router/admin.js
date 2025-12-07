@@ -1,17 +1,8 @@
 const {Router} = require("express")
-const { usermodel } = require("../db")
-const bcrypt  = require("bcrypt")
-const {z} = require("zod")
-const saltround = 10
-// const {auth} = require("./auth")
 
-const JWT_SECRET = "secret"
-const jwt = require("jsonwebtoken")
+const adminRouter = Router()
 
-const userRouter = Router()
-
-
-userRouter.post('/signup',async function(req,res){
+adminRouter.post('/signup',async function(req,res){
     const reqbody = z.object({
         email : z.email(),
         password : z.string().min(8),
@@ -42,7 +33,7 @@ userRouter.post('/signup',async function(req,res){
 
 })
 
-userRouter.post('/signin',async function(req,res){
+adminRouter.post('/signin',async function(req,res){
     const email = req.body.email
     const password = req.body.password
 
@@ -73,12 +64,14 @@ userRouter.post('/signin',async function(req,res){
     }
 })
 
-userRouter.get("/purchases", async function(req,res){
+adminRouter.use(adminMiddleware)
+
+adminRouter.get("/course", async function(req,res){
 
 })
 
 
 
 module.exports = {
-    userRouter : userRouter
+    adminRouter : adminRouter
 }
