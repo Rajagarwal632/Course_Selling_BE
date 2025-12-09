@@ -6,7 +6,7 @@ const saltround = 10
 // const {auth} = require("./auth")
 
 const jwt = require("jsonwebtoken")
-const JWT_SECRET = "secret"
+const JWT_USER_SECRET = "secret"
 
 const userRouter = Router()
 
@@ -15,7 +15,8 @@ userRouter.post('/signup',async function(req,res){
     const reqbody = z.object({
         email : z.string().email(),
         password : z.string().min(8),
-        name : z.string().min(3)
+        firstname : z.string().min(3),
+        lastname : z.string().min(3)
     })
     const parsedatawithsucess = reqbody.safeParse(req.body)
     if(!parsedatawithsucess.success){
@@ -27,17 +28,19 @@ userRouter.post('/signup',async function(req,res){
     }
     const email = req.body.email
     const password = req.body.password
-    const name = req.body.name
+    const firstname = req.body.firstname
+    const lastname = req.body.lastname
 
     const hashpassword =await bcrypt.hash(password,saltround);
 
     await usermodel.create({
         email:email,
         password:hashpassword,
-        name:name
+        firstname:firstname,
+        lastname:lastname
     })
     res.json({
-        msg : "You are signed up"
+        msg : "You are signed up as user"
     })
 })
 
@@ -60,7 +63,7 @@ userRouter.post('/signin',async function(req,res){
     if(passwordmatch){
         const token = jwt.sign({
             id : existuser._id.toString()
-        },JWT_SECRET)
+        },JWT_USER_SECRET)
         res.json({
             token:token
         })

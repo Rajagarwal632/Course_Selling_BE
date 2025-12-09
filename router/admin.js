@@ -1,10 +1,10 @@
 const {Router} = require("express")
-const {usermodel} = require("../db")
+const {adminmodel} = require("../db")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const {z} = require("zod")
 const saltround = 10
-const JWT_SECRET = "123456789"
+const JWT_ADMIN_SECRET = "123456789"
 
 const adminRouter = Router()
 
@@ -12,7 +12,8 @@ adminRouter.post('/signup',async function(req,res){
     const reqbody = z.object({
         email : z.string().email(),
         password : z.string().min(8),
-        name : z.string().min(3)
+        firstname : z.string().min(3),
+        lastname : z.string().min(3)
     })
     const parsedatawithsucess = reqbody.safeParse(req.body)
     if(!parsedatawithsucess.success){
@@ -24,14 +25,19 @@ adminRouter.post('/signup',async function(req,res){
     }
     const email = req.body.email
     const password = req.body.password
-    const name = req.body.name
+    const firstname = req.body.firstname
+    const lastname = req.body.lastname
 
     const hashpassword =await bcrypt.hash(password,saltround);
 
-    const newuser =await usermodel.create({
+    await adminmodel.create({
         email:email,
         password:hashpassword,
-        name:name
+        firstname:firstname,
+        lastname:lastname
+    })
+    res.json({
+        msg : "Admin created successfully"
     })
 
 
@@ -43,7 +49,7 @@ adminRouter.post('/signin',async function(req,res){
     const email = req.body.email
     const password = req.body.password
 
-    const existuser = await usermodel.findOne({
+    const existuser = await adminmodel.findOne({
         email:email
     })
 
@@ -59,7 +65,7 @@ adminRouter.post('/signin',async function(req,res){
         const token = jwt.sign({
             email:email,
             name:existuser.name
-        },JWT_SECRET)
+        },JWT_ADMIN_SECRET)
         res.json({
             token:token
         })
