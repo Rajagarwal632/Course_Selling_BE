@@ -1,6 +1,4 @@
 const mongoose = require("mongoose")
-const { id } = require("zod/v4/locales")
-console.log("connected ")
 
 mongoose.connect("mongodb://localhost:27017/app")
 
@@ -13,6 +11,7 @@ const user = new Schema({
     firstname : String,
     lastname : String
 })
+
 
 const admin = new Schema({
     email : {type:String,unique : true},
@@ -37,11 +36,11 @@ const purchase = new Schema({
 const usermodel = mongoose.model("user",user)
 const adminmodel = mongoose.model("admin",admin)
 const coursemodel = mongoose.model("course",course)
-const purchaseemodel = mongoose.model("purchase",purchase)
+const purchasemodel = mongoose.model("purchase",purchase)
 
 module.exports = {
     usermodel : usermodel,
     adminmodel : adminmodel,
     coursemodel : coursemodel,
-    purchaseemodel : purchaseemodel
+    purchasemodel : purchasemodel
 }

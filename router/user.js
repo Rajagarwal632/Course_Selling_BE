@@ -13,15 +13,15 @@ const userRouter = Router()
 
 userRouter.post('/signup',async function(req,res){
     const reqbody = z.object({
-        email : z.email(),
+        email : z.string().email(),
         password : z.string().min(8),
         name : z.string().min(3)
     })
     const parsedatawithsucess = reqbody.safeParse(req.body)
-    if(!parsedatawithsucess){
+    if(!parsedatawithsucess.success){
         res.json({
             msg : "Incorrect Format",
-            error : parsedatawithsucess.error
+            error : parsedatawithsucess.error.errors
         })
         return;
     }
