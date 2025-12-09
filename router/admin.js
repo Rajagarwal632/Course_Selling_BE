@@ -64,8 +64,14 @@ adminRouter.post('/signin',async function(req,res){
     }
 })
 
-adminRouter.use(adminMiddleware)
+// adminRouter.use(adminMiddleware)
 
+adminRouter.post("/course", async function(req,res){
+
+})
+adminRouter.put("/course", async function(req,res){
+
+})
 adminRouter.get("/course", async function(req,res){
 
 })

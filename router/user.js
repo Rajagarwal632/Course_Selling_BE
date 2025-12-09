@@ -5,8 +5,8 @@ const {z} = require("zod")
 const saltround = 10
 // const {auth} = require("./auth")
 
-const JWT_SECRET = "secret"
 const jwt = require("jsonwebtoken")
+const JWT_SECRET = "secret"
 
 const userRouter = Router()
 
@@ -31,15 +31,14 @@ userRouter.post('/signup',async function(req,res){
 
     const hashpassword =await bcrypt.hash(password,saltround);
 
-    const newuser =await usermodel.create({
+    await usermodel.create({
         email:email,
         password:hashpassword,
         name:name
     })
-
-
-
-
+    res.json({
+        msg : "You are signed up"
+    })
 })
 
 userRouter.post('/signin',async function(req,res){
@@ -51,7 +50,7 @@ userRouter.post('/signin',async function(req,res){
     })
 
     if(!existuser){
-        res.json({
+        res.status(403).json({
             msg : "User not found"
         })
         return;
@@ -60,14 +59,13 @@ userRouter.post('/signin',async function(req,res){
 
     if(passwordmatch){
         const token = jwt.sign({
-            email:email,
-            name:existuser.name
+            id : existuser._id.toString()
         },JWT_SECRET)
         res.json({
             token:token
         })
     }else{
-        res.json({
+        res.status(403).json({
             msg : "Incorrect password"
         })
     }
