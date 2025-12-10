@@ -116,10 +116,41 @@ adminRouter.post("/course",adminMiddleware, async function(req,res){
 
 })
 adminRouter.put("/course",adminMiddleware, async function(req,res){
+    const adminid = req.userid
+    const reqbody = z.object({
+        title : z.string(),
+        description : z.string().min(8),
+        imageurl: z.string().min(3),
+        price : z.number(),
+        courseid : z.string()
+    })
+    const parsedatawithsucess = reqbody.safeParse(req.body)
+    if(!parsedatawithsucess.success){
+        res.json({
+            msg : "Incorrect Format",
+            error : parsedatawithsucess.error.errors
+        })
+        return;
+    }
+    const title = req.body.title
+    const description = req.body.description
+    const imageurl = req.body.imageurl
+    const price = req.body.price
+    const courseid = req.body.courseid
+
+    await coursemodel.updateOne({
+        _id : courseid,
+        creatorId : adminid
+    },{
+        title,
+        description,
+        price,
+        imageurl,
+    })
     
 })
-adminRouter.get("/course/bulk", async function(req,res){
-
+adminRouter.get("/course/bulk",adminMiddleware, async function(req,res){
+     const adminid = req.userid
 })
 
 
