@@ -1,5 +1,6 @@
 const {Router} = require("express")
 const {adminmodel} = require("../db")
+const {coursemodel} = require("../db")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const {z} = require("zod")
@@ -76,15 +77,48 @@ adminRouter.post('/signin',async function(req,res){
     }
 })
 
-// adminRouter.use(adminMiddleware)
+adminRouter.use(adminMiddleware)
 
-adminRouter.post("/course", async function(req,res){
+adminRouter.post("/course",adminMiddleware, async function(req,res){
+    const adminid = req.userid
+    const reqbody = z.object({
+        title : z.string(),
+        description : z.string().min(8),
+        imageurl: z.string().min(3),
+        price : z.number()
+    })
+    const parsedatawithsucess = reqbody.safeParse(req.body)
+    if(!parsedatawithsucess.success){
+        res.json({
+            msg : "Incorrect Format",
+            error : parsedatawithsucess.error.errors
+        })
+        return;
+    }
+    const title = req.body.title
+    const description = req.body.description
+    const imageurl = req.body.imageurl
+    const price = req.body.price
+
+    const course = await coursemodel.create({
+        title,
+        description,
+        price,
+        imageurl,
+        creatorId : adminid
+
+
+    })
+    res.json({
+        msg : "Course created successfully",
+        courseid : course._id
+    })
 
 })
 adminRouter.put("/course", async function(req,res){
 
 })
-adminRouter.get("/course", async function(req,res){
+adminRouter.get("/course/bulk", async function(req,res){
 
 })
 
