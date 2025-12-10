@@ -4,7 +4,8 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const {z} = require("zod")
 const saltround = 10
-const JWT_ADMIN_SECRET = "123456789"
+const { JWT_ADMIN_SECRET } = require("../config")
+
 
 const adminRouter = Router()
 
@@ -63,8 +64,7 @@ adminRouter.post('/signin',async function(req,res){
 
     if(passwordmatch){
         const token = jwt.sign({
-            email:email,
-            name:existuser.name
+            id:existuser._id
         },JWT_ADMIN_SECRET)
         res.json({
             token:token

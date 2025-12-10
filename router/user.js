@@ -3,10 +3,12 @@ const { usermodel } = require("../db")
 const bcrypt  = require("bcrypt")
 const {z} = require("zod")
 const saltround = 10
+const {usermiddleware} = require("../middleware/user")
 // const {auth} = require("./auth")
+const { JWT_USER_SECRET } = require("../config")
 
 const jwt = require("jsonwebtoken")
-const JWT_USER_SECRET = "secret"
+
 
 const userRouter = Router()
 

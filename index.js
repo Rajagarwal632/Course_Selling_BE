@@ -5,10 +5,10 @@ const mongoose = require("mongoose")
 // const bcrypt  = require("bcrypt")
 // const {z} = require("zod")
 // const saltround = 10
-const {auth} = require("./auth")
 const {usermodel} = require("./db")
 const {coursemodel} = require("./db")
 const {adminmodel} = require("./db")
+const {usermiddleware} = require("./middleware/user")
 
 
 
