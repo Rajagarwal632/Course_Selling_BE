@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken")
 const {z} = require("zod")
 const saltround = 10
 const { JWT_ADMIN_SECRET } = require("../config")
+const { adminmiddleware } = require("../middleware/admin")
 
 
 const adminRouter = Router()
@@ -77,21 +78,21 @@ adminRouter.post('/signin',async function(req,res){
     }
 })
 
-adminRouter.use(adminMiddleware)
+adminRouter.use(adminmiddleware)
 
-adminRouter.post("/course",adminMiddleware, async function(req,res){
-    const adminid = req.userid
+adminRouter.post("/course",adminmiddleware, async function(req,res){
+    const adminid = req.userId
     const reqbody = z.object({
         title : z.string(),
         description : z.string().min(8),
-        imageurl: z.string().min(3),
-        price : z.number()
+        price : z.number(),
+        imageurl: z.string().min(3)
     })
     const parsedatawithsucess = reqbody.safeParse(req.body)
     if(!parsedatawithsucess.success){
         res.json({
             msg : "Incorrect Format",
-            error : parsedatawithsucess.error.errors
+            error : parsedatawithsucess.error
         })
         return;
     }
@@ -115,28 +116,28 @@ adminRouter.post("/course",adminMiddleware, async function(req,res){
     })
 
 })
-adminRouter.put("/course",adminMiddleware, async function(req,res){
-    const adminid = req.userid
+adminRouter.put("/course",adminmiddleware, async function(req,res){
+    const adminid = req.userId
     const reqbody = z.object({
         title : z.string(),
         description : z.string().min(8),
-        imageurl: z.string().min(3),
         price : z.number(),
+        imageurl: z.string().min(3),
         courseid : z.string()
     })
     const parsedatawithsucess = reqbody.safeParse(req.body)
     if(!parsedatawithsucess.success){
         res.json({
             msg : "Incorrect Format",
-            error : parsedatawithsucess.error.errors
+            error : parsedatawithsucess.error
         })
         return;
     }
     const title = req.body.title
     const description = req.body.description
     const imageurl = req.body.imageurl
-    const price = req.body.price
     const courseid = req.body.courseid
+    const price = req.body.price
 
     await coursemodel.updateOne({
         _id : courseid,
@@ -146,6 +147,7 @@ adminRouter.put("/course",adminMiddleware, async function(req,res){
         description,
         price,
         imageurl,
+        
     })
     res.json({
         msg : "Course updated successfully"
@@ -153,7 +155,7 @@ adminRouter.put("/course",adminMiddleware, async function(req,res){
     
 })
 
-adminRouter.get("/course/bulk",adminMiddleware, async function(req,res){
+adminRouter.get("/course/bulk",adminmiddleware, async function(req,res){
     const adminid = req.userid
     const courses = await coursemodel.find({
         creatorId : adminid
