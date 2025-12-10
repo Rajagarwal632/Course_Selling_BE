@@ -147,10 +147,23 @@ adminRouter.put("/course",adminMiddleware, async function(req,res){
         price,
         imageurl,
     })
+    res.json({
+        msg : "Course updated successfully"
+    })
     
 })
+
 adminRouter.get("/course/bulk",adminMiddleware, async function(req,res){
-     const adminid = req.userid
+    const adminid = req.userid
+    const courses = await coursemodel.find({
+        creatorId : adminid
+    })
+    res.json({
+        msg : "Course fetched successfully",
+        courses
+    })
+
+
 })
 
 
