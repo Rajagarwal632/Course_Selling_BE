@@ -115,8 +115,8 @@ adminRouter.post("/course",adminMiddleware, async function(req,res){
     })
 
 })
-adminRouter.put("/course", async function(req,res){
-
+adminRouter.put("/course",adminMiddleware, async function(req,res){
+    
 })
 adminRouter.get("/course/bulk", async function(req,res){
 
