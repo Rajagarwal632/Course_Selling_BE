@@ -24,7 +24,7 @@ userRouter.post('/signup',async function(req,res){
     if(!parsedatawithsucess.success){
         res.json({
             msg : "Incorrect Format",
-            error : parsedatawithsucess.error.errors
+            error : parsedatawithsucess.error
         })
         return;
     }
